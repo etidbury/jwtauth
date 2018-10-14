@@ -1,0 +1,12 @@
+__tests__
+.vscode
+.circleci
+src/
+.eslintignore
+.eslintrc
+.flowconfig
+.gitignore
+jest.config.js
+
+.env
+

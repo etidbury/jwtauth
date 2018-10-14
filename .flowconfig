@@ -1,0 +1,10 @@
+[ignore]
+.*/node_modules/.*
+.*/build/.*
+.*/server/.*
+.*/.build.*
+.*._/.*
+[libs]
+flow-typed/
+[options]
+esproposal.optional_chaining=enable

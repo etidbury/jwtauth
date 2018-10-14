@@ -1,0 +1,81 @@
+version: 2
+jobs:
+  build:
+    #working_directory: /app
+    #environment:
+    #    SSH_USER: etidbury
+    branches:
+      only:
+        - edd
+        - eddie
+        - staging
+        - production
+    docker:
+      #- image: circleci/node:10-browsers
+      - image: circleci/node:10
+      #- image: docker:17.05.0-ce-git
+    steps:
+      - run:
+          name: Check GITHUB_TOKEN is set
+          command: |
+              if [ -z "$GITHUB_TOKEN" ]; then
+                echo "GITHUB_TOKEN needs to be defined in project" && exit 1
+              fi
+              
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+
+      #- run: yarn install
+      #- run: sudo yarn global add tidil
+      #- run: sudo yarn global add sails
+
+
+      #- run: yarn install
+      #- run: sudo yarn global add gulplite
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+    
+      - run:
+          name: Working directory info
+          command: |
+              ls -la
+              pwd
+      - run:
+          name: Set Git Credentials
+          command: |
+              git config --global user.email "bot@circleci.com"
+              git config --global user.name "CircleCI"
+
+      # - run:
+      #     name: Initialise DB
+      #     command: |
+      #         yarn db:migrate
+      #         yarn db:seed     
+      - deploy:
+          name: Deployment
+          command: |
+
+            if [ "${CIRCLE_BRANCH}" == "staging" ]; then
+
+              echo "deploy staging..."
+
+            elif [ "${CIRCLE_BRANCH}" == "production" ]; then
+
+              echo "deploy staging..."
+
+            else
+
+          
+              sh .circleci/deploy/development.sh
+
+
+            fi

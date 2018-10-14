@@ -1,0 +1,68 @@
+declare type User = {
+    id:number,
+    timeRegistered:Date,
+    /**
+     * 'moderator' , 'guest' , 'normal', 'app'
+     */
+    userType:string
+}
+
+/**
+ * Association with user an oauth user. Used for when user authorises through a third party service
+ * (e.g. Facebook login)
+ * 
+ */
+declare type UserOAuthConnect = {
+    id:number,
+    User:User,
+    UserId?:number,
+    OAuthUserId:number,
+    timeRegistered:Date,
+    isDisabled:boolean
+}
+
+/**
+ * For basic logins
+ */
+declare type UserBasicCredentialSet = {
+    id:number,
+    User:User,
+    UserId?:number,
+    username:string,
+    passwordHash:string,
+    passwordSaltHash:string,
+    timeExpires:Date,
+    isExpires:boolean
+}
+
+/**
+ * For token-based logins
+ * (e.g. magic links, login via email etc.)
+ * 
+ */
+declare type UserAuthTokenCredentialSet = {
+    id:number,
+    User:User,
+    UserId?:number,
+    username:string,
+    authTokenHash:string,
+    timeExpires:Date,
+    isDisabled:boolean,
+    isExpires:boolean,
+
+    grantedByUserReference?:User,
+    appReference?:string
+}
+
+declare type UserScope = {
+    User:User,
+    UserId?:number,
+    scope:string,
+    createdAt:Date,
+    timeExpires:Date,
+    isExpires:boolean,
+    isDisabled:boolean,
+
+    grantedByUserReference?:User,
+    appReference?:string
+}
