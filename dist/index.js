@@ -14,10 +14,16 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var JWT_AUTH_API_URL = process.env.JWT_AUTH_API_URL;
+var _process$env = process.env,
+    JWT_AUTH_API_URL = _process$env.JWT_AUTH_API_URL,
+    JWT_AUTH_APP_ID = _process$env.JWT_AUTH_APP_ID;
 
 if (!(JWT_AUTH_API_URL === null || JWT_AUTH_API_URL === void 0 ? void 0 : JWT_AUTH_API_URL.length)) {
   throw new TypeError('Required environment variable not set: JWT_AUTH_API_URL');
+}
+
+if (!(JWT_AUTH_APP_ID === null || JWT_AUTH_APP_ID === void 0 ? void 0 : JWT_AUTH_APP_ID.length)) {
+  throw new TypeError('Required environment variable not set: JWT_AUTH_APP_ID');
 }
 
 var _verify =
@@ -35,7 +41,18 @@ function () {
             return _context.abrupt("return", _Client.default.post((0, _urlJoin.default)(JWT_AUTH_API_URL, '/verify'), {
               UserId: UserId,
               token: token,
-              scopes: scopes
+              scopes: scopes,
+              appIdReference: JWT_AUTH_APP_ID
+            }).catch(function (err) {
+              var _err$response;
+
+              switch (err === null || err === void 0 ? void 0 : (_err$response = err.response) === null || _err$response === void 0 ? void 0 : _err$response.status) {
+                case 403:
+                  throw new _httpErrors.Forbidden('You do not have access to this resource');
+
+                default:
+                  throw new _httpErrors.Unauthorized('Invalid credentials');
+              }
             }));
 
           case 2:
@@ -61,9 +78,11 @@ function () {
       while (1) {
         switch (_context3.prev = _context3.next) {
           case 0:
-            console.log('set hasscopes');
+            if (!request.auth) {
+              request.auth = {};
+            }
 
-            request.hasScopes =
+            request.auth.hasScopes =
             /*#__PURE__*/
             function () {
               var _ref4 = _asyncToGenerator(
