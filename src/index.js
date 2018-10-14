@@ -48,7 +48,11 @@ const _verify = async ({ token,scopes,UserId }:{token:string,scopes:Array<string
 
 module.exports = async (request:FastifyRequest, reply:FastifyReply) => {
 
-    request.hasScopes = async (scopes:Array<string>)=>{
+    if (!request.auth){
+        request.auth = {}
+    }
+
+    request.auth.hasScopes = async (scopes:Array<string>)=>{
 
         if (!scopes || !scopes.length || !scopes[0].length){
             throw TypeError('At least 1 scope must be specified when calling hasScopes()')
