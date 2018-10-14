@@ -1,7 +1,5 @@
 "use strict";
 
-var _fastify = require("fastify");
-
 var _urlJoin = _interopRequireDefault(require("url-join"));
 
 var _Client = _interopRequireDefault(require("./lib/Client"));
@@ -14,30 +12,37 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var _process$env = process.env,
-    JWT_AUTH_API_URL = _process$env.JWT_AUTH_API_URL,
-    JWT_AUTH_APP_ID = _process$env.JWT_AUTH_APP_ID;
-
-if (!(JWT_AUTH_API_URL === null || JWT_AUTH_API_URL === void 0 ? void 0 : JWT_AUTH_API_URL.length)) {
-  throw new TypeError('Required environment variable not set: JWT_AUTH_API_URL');
-}
-
-if (!(JWT_AUTH_APP_ID === null || JWT_AUTH_APP_ID === void 0 ? void 0 : JWT_AUTH_APP_ID.length)) {
-  throw new TypeError('Required environment variable not set: JWT_AUTH_APP_ID');
-}
-
 var _verify =
 /*#__PURE__*/
 function () {
   var _ref2 = _asyncToGenerator(
   /*#__PURE__*/
   regeneratorRuntime.mark(function _callee(_ref) {
-    var token, scopes, UserId;
+    var token, scopes, UserId, _process$env, JWT_AUTH_API_URL, JWT_AUTH_APP_ID;
+
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             token = _ref.token, scopes = _ref.scopes, UserId = _ref.UserId;
+            _process$env = process.env, JWT_AUTH_API_URL = _process$env.JWT_AUTH_API_URL, JWT_AUTH_APP_ID = _process$env.JWT_AUTH_APP_ID;
+
+            if (JWT_AUTH_API_URL === null || JWT_AUTH_API_URL === void 0 ? void 0 : JWT_AUTH_API_URL.length) {
+              _context.next = 4;
+              break;
+            }
+
+            throw new TypeError('Required environment variable not set: JWT_AUTH_API_URL');
+
+          case 4:
+            if (JWT_AUTH_APP_ID === null || JWT_AUTH_APP_ID === void 0 ? void 0 : JWT_AUTH_APP_ID.length) {
+              _context.next = 6;
+              break;
+            }
+
+            throw new TypeError('Required environment variable not set: JWT_AUTH_APP_ID');
+
+          case 6:
             return _context.abrupt("return", _Client.default.post((0, _urlJoin.default)(JWT_AUTH_API_URL, '/verify'), {
               UserId: UserId,
               token: token,
@@ -55,7 +60,7 @@ function () {
               }
             }));
 
-          case 2:
+          case 7:
           case "end":
             return _context.stop();
         }

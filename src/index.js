@@ -5,7 +5,7 @@
 // } = process.env
 
 // const isProd = NODE_ENV === 'production'
-import { FastifyInstance,FastifyRequest, FastifyReply,RouteShorthandOptions } from 'fastify'
+import type { FastifyInstance,FastifyRequest, FastifyReply,RouteShorthandOptions } from 'fastify'
 import urljoin from 'url-join'
 import Client from './lib/Client'
 // // this function is executed for every request before the handler is executed
@@ -32,7 +32,7 @@ const _verify = async ({ token,scopes,UserId }:{token:string,scopes:Array<string
     if (!JWT_AUTH_APP_ID?.length){
         throw new TypeError('Required environment variable not set: JWT_AUTH_APP_ID')
     }
-    
+
     return Client.post(urljoin(JWT_AUTH_API_URL,'/verify'),{
         UserId,
         token,
