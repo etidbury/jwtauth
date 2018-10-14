@@ -19,18 +19,20 @@ import {
     Forbidden
 } from 'http-errors'
 
-const {
-    JWT_AUTH_API_URL,
-    JWT_AUTH_APP_ID
-} = process.env
-
-if (!JWT_AUTH_API_URL?.length){
-    throw new TypeError('Required environment variable not set: JWT_AUTH_API_URL')
-}
-if (!JWT_AUTH_APP_ID?.length){
-    throw new TypeError('Required environment variable not set: JWT_AUTH_APP_ID')
-}
 const _verify = async ({ token,scopes,UserId }:{token:string,scopes:Array<string>,UserId:string})=>{
+
+    const {
+        JWT_AUTH_API_URL,
+        JWT_AUTH_APP_ID
+    } = process.env
+    
+    if (!JWT_AUTH_API_URL?.length){
+        throw new TypeError('Required environment variable not set: JWT_AUTH_API_URL')
+    }
+    if (!JWT_AUTH_APP_ID?.length){
+        throw new TypeError('Required environment variable not set: JWT_AUTH_APP_ID')
+    }
+    
     return Client.post(urljoin(JWT_AUTH_API_URL,'/verify'),{
         UserId,
         token,
