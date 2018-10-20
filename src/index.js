@@ -1,5 +1,6 @@
 // @flow
-
+if (!global._babelPolyfill)
+    require('babel-polyfill')
 // const {
 //     NODE_ENV
 // } = process.env

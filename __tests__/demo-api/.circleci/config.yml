@@ -1,26 +1,20 @@
 version: 2
 jobs:
   build:
-    # environment:
-    #   ## SEQUELIZE
-    #   USE_SEQUELIZE: 'true'
-    #   #SEQUELIZE_AUTO_CONNECT: true
-    #   SEQUELIZE_SYNC: 'true'
-    #   SEQUELIZE_SYNC_FORCE: 'true'
-    #   ## Load fixtures upon starting API
-    #   FIXTURES: 'true'
-    #   ## MySQL Connection Settings (SHOULD BE SET IN CIRCLECI)
-    #   # MYSQL_HOST: ''
-    #   # MYSQL_USER: ''
-    #   # MYSQL_PASSWORD: ''
-    #   MYSQL_DB_NAME: 'db_oauth-api'
-    #   PORT: '3004'
+    #working_directory: /app
+    #environment:
+    #    SSH_USER: etidbury
+    branches:
+      only:
+        - edd
+        - eddie
+        - staging
+        - production
     docker:
       #- image: circleci/node:10-browsers
       - image: circleci/node:10
       #- image: docker:17.05.0-ce-git
     steps:
-      #- setup_remote_docker
       - run:
           name: Check GITHUB_TOKEN is set
           command: |
@@ -37,17 +31,19 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: sudo yarn global add tidil
 
+      #- run: yarn install
+      #- run: sudo yarn global add tidil
+      #- run: sudo yarn global add sails
+
+
+      #- run: yarn install
+      #- run: sudo yarn global add gulplite
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-
-      - run:
-          name: Yarn install
-          command: |
-              yarn
+    
       - run:
           name: Working directory info
           command: |
@@ -64,34 +60,22 @@ jobs:
       #     command: |
       #         yarn db:migrate
       #         yarn db:seed     
-      - run:
+      - deploy:
           name: Deployment
           command: |
-            
+
             if [ "${CIRCLE_BRANCH}" == "staging" ]; then
 
-              echo "Deploy staging..."
+              echo "deploy staging..."
 
             elif [ "${CIRCLE_BRANCH}" == "production" ]; then
 
-              echo "Deploy production..."
+              echo "deploy staging..."
 
             else
 
-            fi
-            
-            # Note: this script also has 'staging' and 'production' specific commands
-            sh ./node_modules/tpl-lib-helpers/util/circleci/default.sh
+          
+              sh .circleci/deploy/development.sh
 
-workflows:
-  version: 2
-  build-and-deploy:
-    jobs:
-      - build:
-          filters:
-            branches:
-              only:
-                - edd
-                - eddie
-                - staging
-                - production
+
+            fi

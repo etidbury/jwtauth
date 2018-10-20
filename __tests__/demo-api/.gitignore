@@ -6,7 +6,8 @@ node_modules
 # testing
 /coverage
 
-
+# production
+build
 
 # misc
 .DS_Store
@@ -26,5 +27,3 @@ node_modules
 
 # Ignore builds?
 # .build*
-
-__tests__/demo-api/node_modules

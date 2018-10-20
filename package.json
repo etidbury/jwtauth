@@ -2,7 +2,11 @@
   "name": "@etidbury/jwtauth",
   "version": "0.0.4",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "files": [
+    "dist/**/*"
+  ],
   "engines": {
     "node": "10.x.x"
   },
@@ -13,10 +17,10 @@
     "flow": "$(npm bin)/flow",
     "eslint": "$(npm bin)/eslint --max-warnings 300 ./",
     "setup": "tidil setup --tpl lib",
-    "test:server": "JWT_AUTH_APP_ID=jwtauth_test JWT_AUTH_API_URL=http://127.0.0.1:3004 sh -c \"yarn build && cd __tests__/demo-api && PORT=4005 yarn dev --inspect 9229\"",
-    "test": "JWT_AUTH_APP_ID=jwtauth_test JWT_AUTH_API_URL=http://127.0.0.1:3004 NODE_ENV=test PORT=4005 sh -c \"tidil check-server --port-env PORT --wait 2 || (echo '\n\nRun test:server script first!\n' && exit 1) && $(npm bin)/jest\"",
-    "test:watch": "NODE_ENV=test PORT=4005 sh -c \"tidil check-server --port-env PORT --wait 2 || (echo '\n\nRun test:server script first!\n' && exit 1) && $(npm bin)/jest --watchAll --runInBand\"",
-    "test:ci": "npm run flow && npm run eslint && npm run test"
+    "test:ci": "DEBUG=true PORT=3004 sh -c \"tidil kill $(echo $PORT) && npm run flow && npm run eslint && touch out.log ; npm run test:server > out.log & (tidil check-server --port-env PORT --wait 20 && npm run test) || (tail -n 1000 out.log ; rm out.log ; exit 1)\"",
+    "test:server": "JWT_AUTH_APP_ID=jwtauth_test JWT_AUTH_API_URL=http://127.0.0.1:3004 sh -c \"yarn build && cd __tests__/demo-api && yarn && yarn dev\"",
+    "test": "JWT_AUTH_APP_ID=jwtauth_test JWT_AUTH_API_URL=http://127.0.0.1:3004 NODE_ENV=test sh -c \"$(npm bin)/jest\"",
+    "test:watch": "NODE_ENV=test PORT=4005 sh -c \"tidil check-server --port-env PORT --wait 2 || (echo '\n\nRun test:server script first!\n' && exit 1) && $(npm bin)/jest --watchAll --runInBand\""
   },
   "dependencies": {
     "axios": "0.18.0",

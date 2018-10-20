@@ -4,9 +4,8 @@ build
 .next
 *.lock
 *.json
+flow-typed/npm/*
 ._*
 Dockerfile
 *.md
 *.log
-dist
-flow-typed
