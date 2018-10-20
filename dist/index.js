@@ -59,10 +59,9 @@ function () {
               switch (err === null || err === void 0 ? void 0 : (_err$response = err.response) === null || _err$response === void 0 ? void 0 : _err$response.status) {
                 case 403:
                   throw new _httpErrors.Forbidden('You do not have access to this resource');
-
-                default:
-                  throw new _httpErrors.Unauthorized('Invalid credentials');
               }
+
+              throw new _httpErrors.Unauthorized('Invalid credentials');
             }));
 
           case 7:
@@ -149,17 +148,13 @@ function () {
 
                       case 13:
                         UserId = request.headers['X-User-Id'];
-                        _context2.next = 16;
-                        return _verify({
+                        return _context2.abrupt("return", _verify({
                           token: token,
                           scopes: scopes,
                           UserId: UserId
-                        });
+                        }));
 
-                      case 16:
-                        return _context2.abrupt("return", true);
-
-                      case 17:
+                      case 15:
                       case "end":
                         return _context2.stop();
                     }

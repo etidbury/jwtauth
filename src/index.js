@@ -43,9 +43,9 @@ const _verify = async ({ token,scopes,UserId }:{token:string,scopes:Array<string
         switch(err?.response?.status){
         case 403:
             throw new Forbidden('You do not have access to this resource')
-        default:
-            throw new Unauthorized('Invalid credentials')
         }
+
+        throw new Unauthorized('Invalid credentials')
     })
 }
 
@@ -82,8 +82,7 @@ module.exports = async (request:FastifyRequest, reply:FastifyReply) => {
 
         const UserId = request.headers['X-User-Id']
        
-        await _verify({ token,scopes,UserId })
+        return _verify({ token,scopes,UserId })
 
-        return true
     }
 }
